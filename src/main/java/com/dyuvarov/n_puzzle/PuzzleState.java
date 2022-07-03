@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 /** Representation of puzzle state. */
 @Getter
@@ -65,6 +66,23 @@ public class PuzzleState {
         if (puzzle == null) {
             return null;
         }
-        return puzzle.clone();
+        if (puzzle.length == 0) {
+            return new int[][] {};
+        }
+
+        int[][] copy = new int[puzzle.length][puzzle[0].length];
+        for (int i = 0; i < puzzle.length; ++i) {
+            copy[i] = puzzle[i].clone();
+        }
+        return copy;
+    }
+
+    /** Puzzle state to print */
+    public String puzzleToString() {
+        var sj = new StringJoiner("\n");
+        for(var row : puzzle) {
+            sj.add(Arrays.toString(row));
+        }
+        return sj.toString();
     }
 }
