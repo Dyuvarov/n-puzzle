@@ -14,20 +14,29 @@ import java.util.Set;
 @Setter
 public class AStar {
 
-    /** All possible states of puzzle */
+    /** States to examined and candidates to expansion */
     private final Set<PuzzleState>    openedSet = new HashSet<>();
 
-    /** Opened set as priority queue to choose best one fast. */
+    /** Opened set as priority queue to choose best one fast */
     private final PriorityQueue<PuzzleState>    openedSetQ;
+
+    /** States already selected by algorithm , compared to solution, and expanded */
+    private final Set<PuzzleState>  closedSet = new HashSet<>();
 
     /** Heuristic function */
     private final AStarHeuristic heuristic;
 
-    /** Visited states counter. For statistics */
-    private int visitedStates = 0;
-
     /** How many milliseconds search has taken */
     private long solvingTime = 0;
+
+    /** Total number of states ever selected in the "opened" set   */
+    private long selectedInOS = 0;
+
+    /**
+     * Maximum number of states ever represented in memory at the same time
+     * during the search
+     */
+    private long maxStatesInMemory = 0;
 
 
     public AStar(AStarHeuristic heuristic) {
@@ -45,16 +54,17 @@ public class AStar {
     public PuzzleState execute(PuzzleState initial) {
         long start = System.currentTimeMillis();
         openedSet.add(initial);
-
         openedSetQ.add(initial);
+
         while (!openedSetQ.isEmpty()) {
             var state = openedSetQ.poll();
-            ++visitedStates;
 
             if (stateIsGoal(state.getPuzzle())) {
                 this.solvingTime = System.currentTimeMillis() - start;
                 return state;
             }
+            openedSet.remove(state);
+            closedSet.add(state);
             findStates(state);
         }
         this.solvingTime = System.currentTimeMillis() - start;
@@ -87,21 +97,25 @@ public class AStar {
             //Move empty field UP and create new state
             var puzzle = swapFields(state.getPuzzleCopy(), row, col, row-1, col);
             addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col, row-1, state, Move.UP));
+            maxStatesInMemory = Math.max(maxStatesInMemory, openedSet.size() + closedSet.size() + 1); //statistics
         }
         if (row < state.getPuzzle().length-1) {
             //Move empty field down and create new state
             var puzzle = swapFields(state.getPuzzleCopy(), row, col, row+1, col);
             addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col, row+1, state, Move.DOWN));
+            maxStatesInMemory = Math.max(maxStatesInMemory, openedSet.size() + closedSet.size() + 1); //statistics
         }
         if (col > 0) {
             //Move empty field left and create new state
             var puzzle = swapFields(state.getPuzzleCopy(), row, col, row, col-1);
             addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col-1, row, state, Move.LEFT));
+            maxStatesInMemory = Math.max(maxStatesInMemory, openedSet.size() + closedSet.size() + 1); //statistics
         }
         if (col < state.getPuzzle()[row].length - 1) {
             //Move empty field right and create new state
             var puzzle = swapFields(state.getPuzzleCopy(), row, col, row, col+1);
             addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col+1, row, state, Move.RIGHT));
+            maxStatesInMemory = Math.max(maxStatesInMemory, openedSet.size() + closedSet.size() + 1); //statistics
         }
     }
 
@@ -124,10 +138,11 @@ public class AStar {
 
     /** Calculate value for given state and add it in opened set */
     private void addStateToOpenedSet(PuzzleState state) {
-        if (!openedSet.contains(state)) {
+        if (!openedSet.contains(state) && !closedSet.contains(state)) {
             state.setValue(state.getDepth() + heuristic.calculate(state));
             openedSet.add(state);
             openedSetQ.add(state);
+            ++selectedInOS; //statistics
         }
     }
 }
