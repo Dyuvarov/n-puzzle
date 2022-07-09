@@ -1,13 +1,16 @@
-package com.dyuvarov.n_puzzle;
+package com.dyuvarov.n_puzzle.util;
+
+import lombok.experimental.UtilityClass;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+@UtilityClass
 public class PuzzleParser {
 
-    private static char commentSymbol = '#';
+    private static final char commentSymbol = '#';
 
     /**
      * Read puzzle from file
@@ -62,7 +65,7 @@ public class PuzzleParser {
     }
 
     private static int[] stringToArrayRow(String s, int size) {
-        String[] splitted = s.split("\\S+");
+        String[] splitted = s.trim().split("\\s+");
         if (splitted.length != size) {
             throw new RuntimeException(String.format("line '%s' has wrong number of columns", s));
         }

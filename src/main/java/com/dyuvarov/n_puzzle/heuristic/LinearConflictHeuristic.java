@@ -1,6 +1,7 @@
 package com.dyuvarov.n_puzzle.heuristic;
 
 import com.dyuvarov.n_puzzle.PuzzleState;
+import com.dyuvarov.n_puzzle.util.PuzzleValidator;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class LinearConflictHeuristic extends ManhattanDistanceHeuristic{
             int currentRowMax = 0;
             for (int j = 0; j < puzzle.length; ++j) {
                 int value = puzzle[i][j];
-                if (value != PuzzleState.EMPTY && goalRow(value, puzzle.length) == i) {
+                if (value != PuzzleState.EMPTY && PuzzleValidator.goalRow(value, puzzle.length) == i) {
                     if (value <= currentRowMax) {
                         ++conflicts;
                         break;
@@ -36,7 +37,7 @@ public class LinearConflictHeuristic extends ManhattanDistanceHeuristic{
             int currentColMax = 0;
             for (int j = 0; j < puzzle.length; ++j) {
                 int value = puzzle[j][i];
-                if (value != PuzzleState.EMPTY && goalCol(value, puzzle.length) == i) {
+                if (value != PuzzleState.EMPTY && PuzzleValidator.goalCol(value, puzzle.length) == i) {
                     if (value <= currentColMax) {
                         ++conflicts;
                         break;

@@ -1,6 +1,7 @@
 package com.dyuvarov.n_puzzle.heuristic;
 
 import com.dyuvarov.n_puzzle.PuzzleState;
+import com.dyuvarov.n_puzzle.util.PuzzleValidator;
 
 /**
  * Manhattan-distance heuristic implementation.
@@ -20,21 +21,12 @@ public class ManhattanDistanceHeuristic implements AStarHeuristic{
                     continue;
                 }
 
-                var goalRow = goalRow(value, puzzle.length); //puzzle is square, same number of rows and cols.
-                var goalCol = goalCol(value, puzzle.length);
+                var goalRow = PuzzleValidator.goalRow(value, puzzle.length); //puzzle is square, same number of rows and cols.
+                var goalCol = PuzzleValidator.goalCol(value, puzzle.length);
 
                 result += Math.abs(x - goalRow) + Math.abs(y - goalCol);
             }
         }
         return result;
-    }
-
-    protected int goalRow(int value, int cols) {
-        return --value / cols;
-    }
-
-    protected int goalCol (int value, int cols) {
-        --value;
-        return value < cols ? value : value % cols;
     }
 }
