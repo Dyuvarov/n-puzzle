@@ -5,17 +5,35 @@ import com.dyuvarov.n_puzzle.heuristic.ManhattanDistanceHeuristic;
 import com.dyuvarov.n_puzzle.heuristic.MisplacedHeuristic;
 import com.dyuvarov.n_puzzle.util.SolutionBuilder;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class Main {
 
     public static void main(String[] args) {
-        var puzzle_3x3 = new int[][]    {   {3, 2, 1},
-                                            {4, 5, 0},
-                                            {7, 8, 6}
-                                        };
+        validateArgs(args);
+
+        int[][] puzzle;
+        try {
+            puzzle = PuzzleParser.parse(args[0]);
+        } catch (RuntimeException e) {
+            System.out.println("ERROR: " + e.getMessage());
+            return;
+        } catch (FileNotFoundException e) {
+            System.out.println(String.format("ERROR: File %s not found", args[0]));
+            return;
+        } catch (IOException e) {
+            System.out.println("Error while parsing");
+            return;
+        }
+
+        //todo validate numbers in puzzle
 
         var aStar = new AStar(new MisplacedHeuristic());
 
-        PuzzleState initial = new PuzzleState(0, puzzle_3x3, 2, 0, null, null);
+        PuzzleState initial = new PuzzleState(0, puzzle, 2, 0, null, null);
         PuzzleState solved = aStar.execute(initial);
         System.out.println("Total number of states ever selected in the \"opened\" set: " + aStar.getSelectedInOS());
         System.out.println("Maximum number of states ever represented in memory at the same time " +
@@ -28,24 +46,21 @@ public class Main {
         System.out.println(sb.getSolutionSequence());
     }
 
-/*
-LinearConflict:
-    Total number of states ever selected in the "opened" set: 2826
-    Maximum number of states ever represented in memory at the same time during the search: 2827
-    Time to solve: 16 ms
-    Total number of moves: 21
+    private static void validateArgs(String[] args) {
+        if (args.length != 2) {
+            System.out.println("Wrong number of arguments!\nRequired 2 arguments:\n fileName (file with puzzle)\n heuristic [0 - misplaced, 1 - Manhattan distance, 2 - linear conflict]");
+            System.exit(1);
+        }
 
-ManhattanDistance:
-    Total number of states ever selected in the "opened" set: 3043
-    Maximum number of states ever represented in memory at the same time during the search: 3044
-    Time to solve: 14 ms
-    Total number of moves: 21
-
-Misplaced:
-    Total number of states ever selected in the "opened" set: 8168
-    Maximum number of states ever represented in memory at the same time during the search: 8169
-    Time to solve: 28 ms
-    Total number of moves: 21
- */
-
+        Integer heuristic;
+        try {
+            heuristic = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            heuristic = null;
+        }
+        if (heuristic == null || heuristic < 1 || heuristic > 3) {
+            System.out.println("Wrong heuristic value. Allowed values: 1, 2, 3");
+            System.exit(1);
+        }
+    }
 }
