@@ -4,6 +4,11 @@ import com.dyuvarov.n_puzzle.PuzzleState;
 import com.dyuvarov.n_puzzle.util.PuzzleValidator;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Improved manhattan distance heuristic.
+ * If to cells in one row or column and their goal positions in same row or column
+ * add 2 to manhattan distance. Because it requires 2 extra moves (up,down or left,right) to resolve this situation.
+ */
 @RequiredArgsConstructor
 public class LinearConflictHeuristic extends ManhattanDistanceHeuristic{
 
@@ -13,6 +18,7 @@ public class LinearConflictHeuristic extends ManhattanDistanceHeuristic{
         return super.calculate(state) + lineConflicts*2;
     }
 
+    /** Calculate count of conflicts int rows */
     private int rowsConflicts(int[][] puzzle) {
         int conflicts = 0;
         for (int i = 0; i < puzzle.length; ++i) {
@@ -22,7 +28,7 @@ public class LinearConflictHeuristic extends ManhattanDistanceHeuristic{
                 if (value != PuzzleState.EMPTY && PuzzleValidator.goalRow(value, puzzle.length) == i) {
                     if (value <= currentRowMax) {
                         ++conflicts;
-                        break;
+                        break; //only one conflict per line
                     }
                     currentRowMax = value;
                 }
@@ -31,6 +37,7 @@ public class LinearConflictHeuristic extends ManhattanDistanceHeuristic{
         return conflicts;
     }
 
+    /** Calculate count of conflicts int columns */
     private int columnsConflicts(int[][] puzzle) {
         int conflicts = 0;
         for (int i = 0; i < puzzle.length; ++i) {
@@ -40,7 +47,7 @@ public class LinearConflictHeuristic extends ManhattanDistanceHeuristic{
                 if (value != PuzzleState.EMPTY && PuzzleValidator.goalCol(value, puzzle.length) == i) {
                     if (value <= currentColMax) {
                         ++conflicts;
-                        break;
+                        break; //only one conflict per line
                     }
                     currentColMax = value;
                 }

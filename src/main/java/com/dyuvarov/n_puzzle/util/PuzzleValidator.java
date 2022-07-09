@@ -1,6 +1,5 @@
 package com.dyuvarov.n_puzzle.util;
 
-import com.dyuvarov.n_puzzle.PuzzleState;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
@@ -10,6 +9,13 @@ import java.util.stream.IntStream;
 
 @UtilityClass
 public class PuzzleValidator {
+    /**
+     * Calculate goal row for cell
+     *
+     * @param value cell value
+     * @param cols number of columns in puzzle
+     * @return goal row index (count from 0)
+     */
     public static int goalRow(int value, int cols) {
         if (value == 0) {
             return cols-1;
@@ -17,6 +23,13 @@ public class PuzzleValidator {
         return --value / cols;
     }
 
+    /**
+     * Calculate goal column for cell
+     *
+     * @param value cell value
+     * @param cols number of columns in puzzle
+     * @return goal column index (count from 0)
+     */
     public static int goalCol (int value, int cols) {
         if (value == 0) {
             return cols-1;
@@ -25,6 +38,10 @@ public class PuzzleValidator {
         return value < cols ? value : value % cols;
     }
 
+    /**
+     * Check cells values in puzzle
+     * @return true when all required values are present, else false
+     */
     public static boolean validateNumbers(int[][] puzzle) {
         Set<Integer> required = IntStream.range(0, puzzle.length*puzzle.length)
                 .boxed()
@@ -37,6 +54,13 @@ public class PuzzleValidator {
         return required.isEmpty();
     }
 
+    /**
+     * Check puzzle solvable
+     * If it needs even number of cell substitutions to get solved puzzle - puzzle unsolvable,
+     * else solvable
+     *
+     * @return true when puzzle has solution, else false
+     */
     public static boolean puzzleSolvable(int[][] puzzle) {
         int substitutions = 0;
         for (int i = 0; i < puzzle.length; ++i) {

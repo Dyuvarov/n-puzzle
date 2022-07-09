@@ -48,6 +48,7 @@ public class PuzzleParser {
         return puzzle;
     }
 
+    /**  Return line without comment */
     private static String clearFromComment(String line) {
         int commentStart = line.indexOf(commentSymbol);
         if (commentStart >= 0) {
@@ -56,6 +57,7 @@ public class PuzzleParser {
         return line;
     }
 
+    /** Convert string to integer */
     private static int parseNumber(String s) {
         try {
             return Integer.parseInt(s);
@@ -64,6 +66,7 @@ public class PuzzleParser {
         }
     }
 
+    /** Convert string to int array */
     private static int[] stringToArrayRow(String s, int size) {
         String[] splitted = s.trim().split("\\s+");
         if (splitted.length != size) {

@@ -12,6 +12,9 @@ public class SolutionBuilder {
     @Getter
     private int movesCount = 0;
 
+    /**
+     * Recursively build string representation for each state of solution
+     */
     public void buildSolution(PuzzleState state) {
         if (state == null) {
             return;
@@ -21,6 +24,7 @@ public class SolutionBuilder {
         ++movesCount;
     }
 
+    /** Whole solution as string */
     public String getSolutionSequence() {
         return sj.toString();
     }

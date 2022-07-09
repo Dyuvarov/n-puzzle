@@ -10,15 +10,12 @@ import com.dyuvarov.n_puzzle.util.SolutionBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Main {
 
+    /** Map to choose heuristic by passed argument */
     private static final Map<Integer, AStarHeuristic> heuristicMap;
     static {
         heuristicMap = new HashMap<>();
@@ -68,6 +65,12 @@ public class Main {
         System.out.println(sb.getSolutionSequence());
     }
 
+    /**
+     * read puzzle from file
+     *
+     * @param filePath file with puzzle
+     * @return puzzle array
+     */
     private static int[][] readPuzzle(String filePath) {
         int[][] puzzle = null;
         try {
@@ -82,6 +85,12 @@ public class Main {
         return puzzle;
     }
 
+    /**
+     * Check passed args
+     *
+     * @param args program args
+     * @return true when args valid, else false
+     */
     private static boolean validateArgs(String[] args) {
         if (args.length != 2) {
             System.out.println("Wrong number of arguments!\nRequired 2 arguments:\n fileName (file with puzzle)\n heuristic [0 - misplaced, 1 - Manhattan distance, 2 - linear conflict]");
@@ -101,6 +110,12 @@ public class Main {
         return true;
     }
 
+    /**
+     * Find empty cell in puzzle
+     *
+     * @param puzzle array
+     * @return array with 2 items array[0] - row with empty cell, array[1] - column with empty cell
+     */
     private static int[] findEmptyCell(int[][] puzzle) {
         for (int i = 0; i < puzzle.length; ++i) {
             for (int j = 0; j < puzzle.length; ++j) {
