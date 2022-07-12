@@ -36,6 +36,7 @@ public class Main {
         }
 
         if(!PuzzleValidator.validateNumbers(puzzle)) {
+            System.out.println("ERROR: wrong numbers in puzzle");
             return;
         }
 
