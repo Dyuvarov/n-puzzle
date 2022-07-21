@@ -94,7 +94,7 @@ public class Main {
      */
     private static boolean validateArgs(String[] args) {
         if (args.length != 2) {
-            System.out.println("Wrong number of arguments!\nRequired 2 arguments:\n fileName (file with puzzle)\n heuristic [0 - misplaced, 1 - Manhattan distance, 2 - linear conflict]");
+            System.out.println("Wrong number of arguments!\nRequired 2 arguments:\n fileName (file with puzzle)\n heuristic [1 - misplaced, 2 - Manhattan distance, 3 - linear conflict]");
             return false;
         }
 
