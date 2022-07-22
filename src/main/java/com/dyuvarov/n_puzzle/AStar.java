@@ -96,25 +96,25 @@ public class AStar {
         if (row > 0) {
             //Move empty field UP and create new state
             var puzzle = swapFields(state.getPuzzleCopy(), row, col, row-1, col);
-            addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col, row-1, state, Move.UP));
+            addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col, (short)(row-1), state, Move.UP));
             maxStatesInMemory = Math.max(maxStatesInMemory, openedSet.size() + closedSet.size() + 1); //statistics
         }
         if (row < state.getPuzzle().length-1) {
             //Move empty field down and create new state
             var puzzle = swapFields(state.getPuzzleCopy(), row, col, row+1, col);
-            addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col, row+1, state, Move.DOWN));
+            addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col, (short)(row+1), state, Move.DOWN));
             maxStatesInMemory = Math.max(maxStatesInMemory, openedSet.size() + closedSet.size() + 1); //statistics
         }
         if (col > 0) {
             //Move empty field left and create new state
             var puzzle = swapFields(state.getPuzzleCopy(), row, col, row, col-1);
-            addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col-1, row, state, Move.LEFT));
+            addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, (short)(col-1), row, state, Move.LEFT));
             maxStatesInMemory = Math.max(maxStatesInMemory, openedSet.size() + closedSet.size() + 1); //statistics
         }
         if (col < state.getPuzzle()[row].length - 1) {
             //Move empty field right and create new state
             var puzzle = swapFields(state.getPuzzleCopy(), row, col, row, col+1);
-            addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, col+1, row, state, Move.RIGHT));
+            addStateToOpenedSet(new PuzzleState(state.getDepth() + 1, puzzle, (short)(col+1), row, state, Move.RIGHT));
             maxStatesInMemory = Math.max(maxStatesInMemory, openedSet.size() + closedSet.size() + 1); //statistics
         }
     }

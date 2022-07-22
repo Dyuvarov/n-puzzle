@@ -28,10 +28,10 @@ public class PuzzleState {
 
     /** Empty field column index (counting from 0) */
 
-    private int emptyCol;
+    private short emptyCol;
 
     /** Empty field row index (counting from 0) */
-    private int emptyRow;
+    private short emptyRow;
 
     /** State from which current state received */
     private PuzzleState previousState;
@@ -39,7 +39,7 @@ public class PuzzleState {
     /** Move to receive current state from previous state */
     private Move    move;
 
-    public PuzzleState(int depth, int[][] puzzle, int emptyCol, int emptyRow, PuzzleState previousState, Move move) {
+    public PuzzleState(int depth, int[][] puzzle, short emptyCol, short emptyRow, PuzzleState previousState, Move move) {
         this.depth = depth;
         this.puzzle = puzzle;
         this.emptyCol = emptyCol;

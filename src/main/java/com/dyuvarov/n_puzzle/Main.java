@@ -40,7 +40,7 @@ public class Main {
             return;
         }
 
-        int[] emptyCell = findEmptyCell(puzzle);
+        short[] emptyCell = findEmptyCell(puzzle);
         if (emptyCell == null) {
             System.out.println("ERROR: no empty field");
             return;
@@ -49,7 +49,7 @@ public class Main {
         var aStar = new AStar(heuristic);
         PuzzleState initial = new PuzzleState(0, puzzle, emptyCell[1], emptyCell[0], null, null);
 
-        if (!PuzzleValidator.puzzleSolvable(initial.getPuzzleCopy())) {
+        if (!PuzzleValidator.puzzleSolvable(initial)) {
             System.out.println("Puzzle unsolvable!");
             return;
         }
@@ -117,11 +117,11 @@ public class Main {
      * @param puzzle array
      * @return array with 2 items array[0] - row with empty cell, array[1] - column with empty cell
      */
-    private static int[] findEmptyCell(int[][] puzzle) {
-        for (int i = 0; i < puzzle.length; ++i) {
-            for (int j = 0; j < puzzle.length; ++j) {
+    private static short[] findEmptyCell(int[][] puzzle) {
+        for (short i = 0; i < puzzle.length; ++i) {
+            for (short j = 0; j < puzzle.length; ++j) {
                 if (puzzle[i][j] == PuzzleState.EMPTY) {
-                    return new int[] {i, j};
+                    return new short[] {i, j};
                 }
             }
         }

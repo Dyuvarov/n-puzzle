@@ -1,5 +1,6 @@
 package com.dyuvarov.n_puzzle.util;
 
+import com.dyuvarov.n_puzzle.PuzzleState;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
@@ -56,28 +57,37 @@ public class PuzzleValidator {
 
     /**
      * Check puzzle solvable
-     * If it needs even number of cell substitutions to get solved puzzle - puzzle unsolvable,
-     * else solvable
+     * If N is odd, then puzzle instance is solvable if number of inversions is even in the input state.
+     * If N is even, puzzle instance is solvable if:
+     *      the blank is on an even row counting from the bottom and number of inversions is odd.
+     *      the blank is on an odd row counting from the bottom  and number of inversions is even.
+     * For all other cases, the puzzle instance is not solvable.
      *
-     * @return true when puzzle has solution, else false
+     * @return true when puzzle solvable, else false
      */
-    public static boolean puzzleSolvable(int[][] puzzle) {
-        int substitutions = 0;
-        for (int i = 0; i < puzzle.length; ++i) {
-            for (int j = 0; j < puzzle.length; ++j) {
-                int goalRow = goalRow(puzzle[i][j], puzzle.length);
-                int goalColumn = goalCol(puzzle[i][j], puzzle.length);
-                while (i != goalRow || j != goalColumn) {
-                    //swap elements
-                    int tmp = puzzle[i][j];
-                    puzzle[i][j] = puzzle[goalRow][goalColumn];
-                    puzzle[goalRow][goalColumn] = tmp;
-                    ++substitutions;
-                    goalRow = goalRow(puzzle[i][j], puzzle.length);
-                    goalColumn = goalCol(puzzle[i][j], puzzle.length);
+    public static boolean puzzleSolvable(PuzzleState state) {
+        int inversions = 0;
+        int size = state.getPuzzle().length;
+        int[] nums = Arrays.stream(state.getPuzzle()).flatMapToInt(Arrays::stream).toArray();
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] == PuzzleState.EMPTY) {
+                continue;
+            }
+            for (int j = i+1; j < nums.length; ++j) {
+                if (nums[j] != PuzzleState.EMPTY && nums[i] > nums[j]) {
+                    ++inversions;
                 }
             }
         }
-        return substitutions % 2 != 0;
+
+        if (size % 2 == 0) {
+            if (inversions%2 == 0) {
+                return (size - state.getEmptyRow()) % 2 != 0;
+            } else {
+                return (size - state.getEmptyRow()) % 2 == 0;
+            }
+        } else {
+            return inversions % 2 == 0;
+        }
     }
 }

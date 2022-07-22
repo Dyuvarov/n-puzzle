@@ -10,7 +10,7 @@ public class SolutionBuilder {
     private StringJoiner sj = new StringJoiner("\n↓\n");
 
     @Getter
-    private int movesCount = 0;
+    private int movesCount = -1;
 
     /**
      * Recursively build string representation for each state of solution
